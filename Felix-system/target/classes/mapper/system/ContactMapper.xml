@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Felix.system.mapper.ContactMapper">
+    
+    <resultMap type="Contact" id="ContactResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+    </resultMap>
+
+    <sql id="selectContactVo">
+        select id, name, phone from contact
+    </sql>
+
+    <select id="selectContactList" parameterType="Contact" resultMap="ContactResult">
+        <include refid="selectContactVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+        </where>
+    </select>
+    
+    <select id="selectContactById" parameterType="Long" resultMap="ContactResult">
+        <include refid="selectContactVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertContact" parameterType="Contact" useGeneratedKeys="true" keyProperty="id">
+        insert into contact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+         </trim>
+    </insert>
+
+    <update id="updateContact" parameterType="Contact">
+        update contact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteContactById" parameterType="Long">
+        delete from contact where id = #{id}
+    </delete>
+
+    <delete id="deleteContactByIds" parameterType="String">
+        delete from contact where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

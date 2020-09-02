@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Felix.system.mapper.TextMapper">
+    
+    <resultMap type="Text" id="TextResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="age"    column="age"    />
+        <result property="score"    column="score"    />
+        <result property="subject"    column="subject"    />
+    </resultMap>
+
+    <sql id="selectTextVo">
+        select id, name, age, score, subject from text
+    </sql>
+
+    <select id="selectTextList" parameterType="Text" resultMap="TextResult">
+        <include refid="selectTextVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="score != null  and score != ''"> and score = #{score}</if>
+            <if test="subject != null  and subject != ''"> and subject = #{subject}</if>
+        </where>
+    </select>
+    
+    <select id="selectTextById" parameterType="Long" resultMap="TextResult">
+        <include refid="selectTextVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertText" parameterType="Text" useGeneratedKeys="true" keyProperty="id">
+        insert into text
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="age != null">age,</if>
+            <if test="score != null">score,</if>
+            <if test="subject != null">subject,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="age != null">#{age},</if>
+            <if test="score != null">#{score},</if>
+            <if test="subject != null">#{subject},</if>
+         </trim>
+    </insert>
+
+    <update id="updateText" parameterType="Text">
+        update text
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="subject != null">subject = #{subject},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTextById" parameterType="Long">
+        delete from text where id = #{id}
+    </delete>
+
+    <delete id="deleteTextByIds" parameterType="String">
+        delete from text where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

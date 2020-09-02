@@ -1,0 +1,73 @@
+package ${packageName}.service;
+
+import java.util.List;
+import ${packageName}.domain.${ClassName};
+#if($table.tree)
+import com.Felix.common.core.domain.Ztree;
+#end
+
+/**
+ * ${functionName}
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface I${ClassName}Service 
+{
+    /**
+     * ${functionName}
+     * 
+     * @param ${pkColumn.javaField} ${functionName}ID
+     * @return ${functionName}
+     */
+    public ${ClassName} select${ClassName}ById(${pkColumn.javaType} ${pkColumn.javaField});
+
+    /**
+     * ${functionName}
+     * 
+     * @param ${className} ${functionName}
+     * @return ${functionName}
+     */
+    public List<${ClassName}> select${ClassName}List(${ClassName} ${className});
+
+    /**
+     * ${functionName}
+     * 
+     * @param ${className} ${functionName}
+     * @return
+     */
+    public int insert${ClassName}(${ClassName} ${className});
+
+    /**
+     * ${functionName}
+     * 
+     * @param ${className} ${functionName}
+     * @return
+     */
+    public int update${ClassName}(${ClassName} ${className});
+
+    /**
+     * ${functionName}
+     * 
+     * @param ids
+     * @return
+     */
+    public int delete${ClassName}ByIds(String ids);
+
+    /**
+     * ${functionName}
+     * 
+     * @param ${pkColumn.javaField} ${functionName}ID
+     * @return
+     */
+    public int delete${ClassName}ById(${pkColumn.javaType} ${pkColumn.javaField});
+#if($table.tree)
+
+    /**
+     * ${functionName}
+     * 
+     * @return ${functionName}
+     */
+    public List<Ztree> select${ClassName}Tree();
+#end
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Felix.system.mapper.Text1Mapper">
+    
+    <resultMap type="Text1" id="Text1Result">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+    </resultMap>
+
+    <sql id="selectText1Vo">
+        select id, name, phone from text1
+    </sql>
+
+    <select id="selectText1List" parameterType="Text1" resultMap="Text1Result">
+        <include refid="selectText1Vo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+        </where>
+    </select>
+    
+    <select id="selectText1ById" parameterType="Long" resultMap="Text1Result">
+        <include refid="selectText1Vo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertText1" parameterType="Text1" useGeneratedKeys="true" keyProperty="id">
+        insert into text1
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+         </trim>
+    </insert>
+
+    <update id="updateText1" parameterType="Text1">
+        update text1
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteText1ById" parameterType="Long">
+        delete from text1 where id = #{id}
+    </delete>
+
+    <delete id="deleteText1ByIds" parameterType="String">
+        delete from text1 where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
